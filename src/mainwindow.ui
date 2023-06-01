@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>960</width>
+    <height>540</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>CE7解压图像查看器</string>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>32</width>
+    <height>32</height>
+   </size>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout" columnstretch="0">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>3</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="QGraphicsView" name="graphicsViewPlaceholder"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="bottomBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::TopToolBarArea</set>
+   </property>
+   <property name="toolButtonStyle">
+    <enum>Qt::ToolButtonTextUnderIcon</enum>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionOpenImage"/>
+   <addaction name="separator"/>
+   <addaction name="actionActualSize"/>
+   <addaction name="actionFitWindow"/>
+   <addaction name="actionFitWidth"/>
+   <addaction name="actionFitHeight"/>
+   <addaction name="separator"/>
+   <addaction name="actionCodec"/>
+   <addaction name="separator"/>
+   <addaction name="actionAbout"/>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>960</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_P">
+    <property name="title">
+     <string>处理控制(&amp;L)</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionOpenImage"/>
+    <addaction name="separator"/>
+    <addaction name="actionCodec"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menu_V_2">
+    <property name="title">
+     <string>关于系统(&amp;A)</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>显示控制(&amp;V)</string>
+    </property>
+    <addaction name="actionActualSize"/>
+    <addaction name="actionFitWindow"/>
+    <addaction name="actionFitWidth"/>
+    <addaction name="actionFitHeight"/>
+   </widget>
+   <addaction name="menu_P"/>
+   <addaction name="menu_2"/>
+   <addaction name="menu_V_2"/>
+  </widget>
+  <action name="actionActualSize">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>实际大小</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionFitWindow">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>适配窗口</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionFitWidth">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>适配宽度</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionFitHeight">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>适配高度</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
+  </action>
+  <action name="actionOpenImage">
+   <property name="text">
+    <string>打开图像文件</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+   <property name="iconText">
+    <string>About</string>
+   </property>
+   <property name="toolTip">
+    <string>About DeCompImgView4CE7</string>
+   </property>
+  </action>
+  <action name="actionCodec">
+   <property name="text">
+    <string>图像Codec</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
