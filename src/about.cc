@@ -39,12 +39,12 @@ void About::initUiComponent(void) {
     int btn_y = ABOUT_WIDGET_HEIGHT - btn_h;
 
     titleLabel = new QLabel(this);
-    titleLabel->setText(tr("ImageViewer"));
+    titleLabel->setText(tr("Ziwi - Image Viewer"));
     titleLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
     auto titleFont = QFont(FONT);
     titleFont.setBold(true);
-    titleFont.setPointSize(10);
+    titleFont.setPointSize(16);
     titleLabel->setFont(titleFont);
 
     infoLabel = new QLabel(this);
@@ -58,7 +58,8 @@ void About::initUiComponent(void) {
     QString info;
     info.append(
         "Ziwi is a free and open source project. "
-        "It is a simple image viewer based on Qt5. It can display images.");
+        "It is a simple image viewer based on Qt5 and OpenCV4. It can display "
+        "raw images(8/12/16 bits).");
 
     infoTextEdit = new QTextEdit(this);
     infoTextEdit->setText(info);
