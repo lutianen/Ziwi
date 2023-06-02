@@ -30,6 +30,7 @@ private:
     QColor normalColor_;
     QColor selectedColor_;
 
+    unsigned char workspace_;
     int mode_;
     bool endian_;
     int width_;

@@ -13,6 +13,8 @@ using Lux::ziwi::ParaConfDialog;
 
 ParaConfDialog::ParaConfDialog(QDialog *parent)
     : QDialog(parent),
+      ce7_(new QRadioButton("CE7", this)),
+      tw2_(new QRadioButton("TW2", this)),
       width_(new QLineEdit(this)),
       height_(new QLineEdit(this)),
       channels_(new QLineEdit(this)),
@@ -27,8 +29,14 @@ ParaConfDialog::ParaConfDialog(QDialog *parent)
       radio48_(new QRadioButton("第四高八位", this)),
       radioAll8_(new QRadioButton("AllIn8", this)),
       conf_(new Lux::ziwi::ParaConf) {
-    QButtonGroup *radioBits = new QButtonGroup(this);
 
+    QButtonGroup *workSpace = new QButtonGroup(this);
+    QLabel *workSpaceLabel = new QLabel("Worksapce: ", this);
+    workSpace->addButton(ce7_, 0);
+    workSpace->addButton(tw2_, 1);
+    ce7_->setChecked(true);
+        
+    QButtonGroup *radioBits = new QButtonGroup(this);
     radioBits->addButton(radio8_, 0);
     radioBits->addButton(radio12_, 1);
     radioBits->addButton(radio16_, 2);
@@ -84,6 +92,10 @@ ParaConfDialog::ParaConfDialog(QDialog *parent)
     connect(submitBtn, &QPushButton::clicked, this, &ParaConfDialog::onSubmit);
 
     auto layout = new QGridLayout(this);
+    layout->addWidget(workSpaceLabel, 0, 0);
+    layout->addWidget(ce7_, 0, 1);
+    layout->addWidget(tw2_, 0, 2);
+
     layout->addWidget(widthLabel, 1, 0);
     layout->addWidget(width_, 1, 1);
     layout->addWidget(new QLabel("像素", this), 1, 2);
@@ -143,6 +155,11 @@ void ParaConfDialog::onSubmit() {
         return;
     }
 
+    if (ce7_->isChecked())
+        conf_->workspace = 0;
+    else if (tw2_->isChecked())
+        conf_->workspace = 1;
+
     conf_->width = width_->text().toUInt();
     conf_->height = height_->text().toUInt();
     conf_->channels = channels_->text().toUInt();
@@ -168,7 +185,7 @@ void ParaConfDialog::onSubmit() {
     else if (radio48_->isChecked())
         conf_->mode = 3;
     else if (radioAll8_->isChecked())
-        conf_->mode = 4;
+        conf_->mode = 5;
 
     accept();
 }

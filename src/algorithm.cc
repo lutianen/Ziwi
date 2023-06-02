@@ -37,8 +37,8 @@ bool DisplayUtils::createDirIfNot(const std::string& dirName) {
 }
 
 unsigned char* DisplayUtils::LoadDataForDisplaySelectableMode(
-    const unsigned char* inData, int dataFormat, bool saveTiffFlag,
-    std::string& tiffFileName, int mode, bool isBigEndian,
+    unsigned char workspace, const unsigned char* inData, int dataFormat,
+    bool saveTiffFlag, std::string& tiffFileName, int mode, bool isBigEndian,
     unsigned long long width, unsigned long long height, int bitDepth,
     int channel) {
     auto code = Unkow;
@@ -53,8 +53,13 @@ unsigned char* DisplayUtils::LoadDataForDisplaySelectableMode(
 
     if (useFileRelay_) {
         std::ofstream ofs(relayFile_, std::ios::binary);
+        std::cout << "Length: "
+                  << static_cast<size_t>(height * width * channel * bitDepth /
+                                         8.0)
+                  << std::endl;
         ofs.write(reinterpret_cast<const char*>(inData),
-                  height * width * channel * bitDepth / 8);  // NOLINT
+                  static_cast<size_t>(height * width * channel * bitDepth /
+                                      8.0));  // NOLINT
         if (ofs.fail()) {
             std::cerr << "Error: failed to write relay file." << std::endl;
             ofs.close();
@@ -63,11 +68,22 @@ unsigned char* DisplayUtils::LoadDataForDisplaySelectableMode(
             ofs.close();
         }
 
-        long long len = LuxLoadImageDataFromFileEnhanced(
-            relayFile_.c_str(), dataFormat, width, height, bitDepth, channel,
-            relayFile_.c_str(), tiffFileName.c_str(), isBigEndian, true,
-            saveTiffFlag, mode, code);
-
+        // 0 - CE7
+        long long len = INT_MIN;
+        if (workspace == 0) {
+            len = LuxLoadImageDataFromFileEnhanced(
+                relayFile_.c_str(), dataFormat, width, height, bitDepth,
+                channel, relayFile_.c_str(), tiffFileName.c_str(), isBigEndian,
+                false, saveTiffFlag, mode, code);
+        } else if (workspace == 1 /* 1 - TW2 */) {
+            len = LuxLoadImageDataFromFileEnhanced(
+                relayFile_.c_str(), dataFormat, width, height, bitDepth,
+                channel, relayFile_.c_str(), tiffFileName.c_str(), isBigEndian,
+                true, saveTiffFlag, mode, code);
+        } else {
+            std::cerr << "Error: unsupported workspace." << std::endl;
+            return nullptr;
+        }
         if (len < 0) return nullptr;
 
         auto* outData = new unsigned char[len];

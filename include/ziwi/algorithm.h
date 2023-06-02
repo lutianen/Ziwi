@@ -33,7 +33,7 @@ public:
 
     DisplayUtils(bool useFileRelay = true, std::string relayFile = RELAY_FILE);
 
-    unsigned char* LoadDataForDisplaySelectableMode(
+    unsigned char* LoadDataForDisplaySelectableMode(unsigned char workspace,
         const unsigned char* inData, int dataFormat, bool saveTiffFlag,
         std::string& tiffFileName, int mode, bool isBigEndian,
         unsigned long long width, unsigned long long height, int bitDepth,

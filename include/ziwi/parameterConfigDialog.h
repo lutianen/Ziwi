@@ -9,6 +9,8 @@ namespace Lux {
 namespace ziwi {
 
 struct ParaConf {
+    // 0 - CE7, 1 - TW2
+    unsigned char workspace;
     unsigned int width;
     unsigned int height;
     unsigned int channels;
@@ -21,6 +23,9 @@ class ParaConfDialog : public QDialog {
     Q_OBJECT
 
 private:
+    QRadioButton *ce7_;
+    QRadioButton *tw2_;
+
     QLineEdit* width_;
     QLineEdit* height_;
     QLineEdit* channels_;

@@ -19,6 +19,7 @@ DeCompImgViewMainWindow::DeCompImgViewMainWindow(QPixmap* pixmap,
       ui_(new Ui::MainWindow),
       normalColor_(kNormalColor),
       selectedColor_(kSelectedColor),
+      workspace_(0),
       mode_(5),
       endian_(false),
       width_(5120),
@@ -142,17 +143,16 @@ void DeCompImgViewMainWindow::onShowLVDSImage() {
 
     auto imgdata = loadImageData();
     if (imgdata == nullptr) return;
-
+    paramConfig();
     std::string tiffFile = "";
     auto outData = imgCore_->LoadDataForDisplaySelectableMode(
-        imgdata, 1, false, tiffFile, mode_, endian_, width_, height_, bpp_,
-        channel_);
+        workspace_, imgdata, 1, false, tiffFile, mode_, endian_, width_, height_,
+        bpp_, channel_);
     if (outData == nullptr) {
         delete imgdata;
         QMessageBox::information(this, tr("提示"), tr("转换失败"));
         return;
     }
-    paramConfig();
 
     // QPixmap pixmap(fileName);
     imageViewer_->setImage(QPixmap::fromImage(
@@ -209,6 +209,7 @@ void DeCompImgViewMainWindow::paramConfig() {
     auto ret = paraConfDialog_->exec();
     if (ret == QDialog::Accepted) {
         Lux::ziwi::ParaConf paraConf = paraConfDialog_->paraConf();
+        workspace_ = paraConf.workspace;
         width_ = paraConf.width;
         height_ = paraConf.height;
         channel_ = paraConf.channels;
