@@ -29,7 +29,7 @@ DeCompImgViewMainWindow::DeCompImgViewMainWindow(QPixmap* pixmap,
       imageViewer_(new Lux::ziwi::ImageViewer(nullptr, "ziwi")),
       appLabel_(new QLabel(this)),
 
-      fileLabel_(new QLabel("请打开一张 raw 图像", this)),
+      fileLabel_(new QLabel("请选择待查看图像", this)),
       imgCore_(new DisplayUtils(true, RELAY_FILE)) {
     ui_->setupUi(this);
 
@@ -106,30 +106,53 @@ void DeCompImgViewMainWindow::buildImageViewer() {
     ui_->centralwidget->setLayout(ui_->gridLayout);
 }
 
-unsigned char* DeCompImgViewMainWindow::loadImageData() {
+ImageInfo* DeCompImgViewMainWindow::loadImageData() {
     // std::cout << __FUNCTION__ << std::endl;
 
     QString fileName = QFileDialog::getOpenFileName(
-        this, tr("打开图像文件"), kBASE_DIR.c_str(),
-        tr("*.raw *.jpg *.png;;所有文件 (*.*)"));
+        this, tr("选择图像"), kBASE_DIR.c_str(),
+        tr("图像文件(*.raw *.jpg *.png *.tiff *.svg);;所有文件 (*.*)"));
     fileLabel_->setText(fileName);
 
-    if (!fileName.isEmpty()) {
-        // QPixmap pixmap(fileName);
-        // imageViewer_->setImage(pixmap);
+    ImageInfo* info = new ImageInfo();
 
-        std::ifstream ifs(fileName.toStdString(), std::ios::binary);
-        if (ifs.is_open()) {
-            ifs.seekg(0, std::ios::end);
-            int length = ifs.tellg();
-            ifs.seekg(0, std::ios::beg);
-            unsigned char* buffer = new unsigned char[length];
-            ifs.read((char*)buffer, length);
-            ifs.close();
-            return buffer;
+    if (fileName.endsWith("raw", Qt::CaseSensitivity::CaseInsensitive)) {
+        info->type_ = ImageType::RAW;
+    } else if (fileName.endsWith("jpg", Qt::CaseSensitivity::CaseInsensitive)) {
+        info->type_ = ImageType::JPG;
+    } else if (fileName.endsWith("png", Qt::CaseSensitivity::CaseInsensitive)) {
+        info->type_ = ImageType::PNG;
+    } else if (fileName.endsWith("tiff",
+                                 Qt::CaseSensitivity::CaseInsensitive)) {
+        info->type_ = ImageType::TIFF;
+    } else if (fileName.endsWith("svg", Qt::CaseSensitivity::CaseInsensitive)) {
+        info->type_ = ImageType::SVG;
+    } else {
+        info->type_ = ImageType::UNKNOWN;
+    }
+
+    if (!fileName.isEmpty()) {
+        info->name_ = fileName.toStdString();
+
+        //
+        if (info->type_ == ImageType::RAW) {
+            std::ifstream ifs(fileName.toStdString(), std::ios::binary);
+            if (ifs.is_open()) {
+                ifs.seekg(0, std::ios::end);
+                int length = ifs.tellg();
+                ifs.seekg(0, std::ios::beg);
+                // unsigned char* buffer = new unsigned char[length];
+                info->data_ = new unsigned char[length];
+                ifs.read((char*)info->data_, length);
+                ifs.close();
+                return info;
+            } else {
+                QMessageBox::information(this, tr("提示"), tr("打开文件失败"));
+                return nullptr;
+            }
         } else {
-            QMessageBox::information(this, tr("提示"), tr("打开文件失败"));
-            return nullptr;
+            info->data_ = nullptr;
+            return info;
         }
 
     } else {
@@ -141,24 +164,33 @@ unsigned char* DeCompImgViewMainWindow::loadImageData() {
 void DeCompImgViewMainWindow::onShowLVDSImage() {
     // std::cout << __FUNCTION__ << std::endl;
 
-    auto imgdata = loadImageData();
-    if (imgdata == nullptr) return;
-    paramConfig();
-    std::string tiffFile = "";
-    auto outData = imgCore_->LoadDataForDisplaySelectableMode(
-        workspace_, imgdata, 1, false, tiffFile, mode_, endian_, width_, height_,
-        bpp_, channel_);
-    if (outData == nullptr) {
-        delete imgdata;
-        QMessageBox::information(this, tr("提示"), tr("转换失败"));
-        return;
+    // auto imgdata = loadImageData();
+    auto imgInfo = loadImageData();
+    if (imgInfo == nullptr) return;
+
+    if (imgInfo->type_ == ImageType::RAW) {
+        paramConfig();
+        std::string tiffFile = "";
+        auto outData = imgCore_->LoadDataForDisplaySelectableMode(
+            workspace_, imgInfo->data_, 1, false, tiffFile, mode_, endian_,
+            width_, height_, bpp_, channel_);
+        if (outData == nullptr) {
+            delete imgInfo;
+            QMessageBox::information(this, tr("提示"), tr("转换失败"));
+            return;
+        }
+
+        // QPixmap pixmap(fileName);
+        imageViewer_->setImage(QPixmap::fromImage(
+            QImage(outData, width_, height_, width_, QImage::Format_Indexed8)));
+
+    } else if (imgInfo->type_ == ImageType::UNKNOWN) {
+        QMessageBox::information(this, tr("提示"), tr("图片类型暂不支持"));
+    } else {  // jpg, png, tiff
+        imageViewer_->setImage(QPixmap(imgInfo->name_.c_str()));
     }
 
-    // QPixmap pixmap(fileName);
-    imageViewer_->setImage(QPixmap::fromImage(
-        QImage(outData, width_, height_, width_, QImage::Format_Indexed8)));
-
-    delete imgdata;
+    delete imgInfo;
 }
 
 void DeCompImgViewMainWindow::onActualSize() {

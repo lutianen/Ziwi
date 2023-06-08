@@ -4,6 +4,7 @@
 #include <ziwi/algorithm.h>
 #include <ziwi/imageViewer.h>
 #include <ziwi/parameterConfigDialog.h>
+#include <ziwi/imageInfo.h>
 
 #include <QAction>
 #include <QColor>
@@ -56,7 +57,7 @@ private:
     void buildAction();
     void buildImageViewer();
 
-    unsigned char* loadImageData();
+    ImageInfo* loadImageData();
     void paramConfig();
 
 private slots:
