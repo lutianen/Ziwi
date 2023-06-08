@@ -51,7 +51,7 @@ void About::initUiComponent(void) {
     infoTextEdit->setFont(infoFont);
     infoTextEdit->setText(tr(SYSTEM_INFO.c_str()));
     infoTextEdit->setReadOnly(true);
-    infoTextEdit->setFixedSize(ABOUT_WIDGET_WIDTH - 36, 100);
+    infoTextEdit->setFixedSize(ABOUT_WIDGET_WIDTH - 36, 200);
 
     auto iconLabel = new QLabel(this);
     iconLabel->setPixmap(QPixmap(kICON_LOGO.c_str()));
