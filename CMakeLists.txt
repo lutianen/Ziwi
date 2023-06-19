@@ -16,7 +16,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # COMPONENTS 指定了需要使用的 Qt 模块
 find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Widgets)
-message(Qt${QT_VERSION_MAJOR})
+message(STATUS Qt${QT_VERSION_MAJOR})
 
 # add_subdirectory(3rdparty/QtAwesome)
 add_subdirectory(imgCore)

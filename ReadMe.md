@@ -11,7 +11,7 @@
 - C++ 17 (filesystem)
 - OpenCV 4.7.0
 - Qt 5.15.9
-- GCC 12.2.1 / Clang 15.0.7
+- GCC / Clang
 - Linux (ArchLinux / Manjaro)  / Window10
 
 ## Evnironment Install / 环境安装
