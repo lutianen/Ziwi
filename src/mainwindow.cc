@@ -219,8 +219,8 @@ void DeCompImgViewMainWindow::onImageCodec() {
 
 void DeCompImgViewMainWindow::onAbout() {
     // std::cout << __FUNCTION__ << std::endl;
-    auto about = new Lux::ziwi::About;
-    about->setWindowTitle("About Ziwi");
+    auto about = new Lux::ziwi::About();
+    about->setWindowTitle(kABOUT_TITLE.c_str());
     about->setWindowIcon(QIcon(kICON_LOGO.c_str()));
     about->setFixedSize(ABOUT_WIDGET_WIDTH, ABOUT_WIDGET_HEIGHT);
     about->show();

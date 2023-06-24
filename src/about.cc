@@ -29,20 +29,10 @@ About::~About() {
 }
 
 void About::initUiComponent(void) {
-    titleLabel = new QLabel(this);
-    titleLabel->setText(tr("Ziwi - Image Viewer"));
-    titleLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-    auto titleFont = QFont(FONT);
-    titleFont.setBold(true);
-    titleFont.setPointSize(16);
-    titleLabel->setFont(titleFont);
-
     infoLabel = new QLabel(this);
     infoLabel->setOpenExternalLinks(true);
     infoLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    infoLabel->setText(tr(VERSION.c_str()) + tr(DATE.c_str()) +
-                       tr(DEVELOPER.c_str()));
+    infoLabel->setText(tr(Github.c_str()));
 
     auto infoFont = QFont(FONT);
     infoFont.setWeight(QFont::Cursive);
@@ -51,15 +41,15 @@ void About::initUiComponent(void) {
     infoTextEdit->setFont(infoFont);
     infoTextEdit->setText(tr(SYSTEM_INFO.c_str()));
     infoTextEdit->setReadOnly(true);
-    infoTextEdit->setFixedSize(ABOUT_WIDGET_WIDTH - 36, 200);
+    infoTextEdit->setFixedSize(ABOUT_WIDGET_WIDTH - 36, 128);
 
     auto iconLabel = new QLabel(this);
+    iconLabel->setScaledContents(true);
     iconLabel->setPixmap(QPixmap(kICON_LOGO.c_str()));
     iconLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
     auto layout = new QVBoxLayout(this);
     layout->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    layout->addWidget(titleLabel);
     layout->addWidget(iconLabel);
     layout->addWidget(infoLabel);
     layout->addWidget(infoTextEdit);
