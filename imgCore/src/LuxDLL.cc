@@ -1,12 +1,5 @@
 /**
- * @file LuxCE7.cc
- * @author Tianen Lu (tianenlu@stu.xidian.edu.cn)
- * @brief
- * @version 0.1
- * @date 2022-10-20
- *
- * @copyright Copyright (c) 2022
- *
+ * @file LuxDLL.cc
  */
 
 #include <imgCore/LuxDLL.h>
@@ -1050,8 +1043,7 @@ inline unsigned long long LuxParseImageExtendTo16(unsigned char *orgiImg,
 
                         outputImg[k++] =
                             (((orgiImg[i + 3] >> 4) << 8) & 0xFF00) +
-                            (((orgiImg[i + 3] << 4) + (orgiImg[i + 4] >> 4))
-                            &
+                            (((orgiImg[i + 3] << 4) + (orgiImg[i + 4] >> 4)) &
                              0x00FF);
                         outputImg[k++] =
                             ((orgiImg[i + 4] & 0x0F) << 8) + orgiImg[i + 5];
@@ -1510,7 +1502,7 @@ long long LuxLoadImageDataFromFileStretchTo16(
  * @param highZero high 4-bit data (0000AAAA AAAAAAAA 0000BBBB BBBBBBBB) is zero
  * ?
  * @param outputImg The pointor of image data in memory after parsing.
- * @param mode {0, 1, 2, 3, 4}
+ * @param mode {0, 1, 2, 3, 4, 5}
  *  - 0: P0P1P2P3P4P5P6P7 P8P9PaPbQ0Q1Q2Q3 Q4Q5Q6Q7Q8Q9QaQb -> P0P1P2P3P4P5P6P7
  * Q0Q1Q2Q3Q4Q5Q6Q7
  *  - 1: P0P1P2P3P4P5P6P7 P8P9PaPbQ0Q1Q2Q3 Q4Q5Q6Q7Q8Q9QaQb -> P1P2P3P4P5P6P7P8
