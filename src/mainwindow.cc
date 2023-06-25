@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QSettings>
 #include <fstream>
 #include <iostream>
 
@@ -80,11 +81,6 @@ void DeCompImgViewMainWindow::buildAction() {
     connect(ui_->actionFitHeight, &QAction::triggered, this,
             &DeCompImgViewMainWindow::onFitHeight);
     ui_->actionFitHeight->setIcon(QIcon(kICON_FIT_HEIGHT.c_str()));
-
-    // Codec
-    connect(ui_->actionCodec, &QAction::triggered, this,
-            &DeCompImgViewMainWindow::onImageCodec);
-    ui_->actionCodec->setIcon(QIcon(kICON_CODEC.c_str()));
 
     // about
     connect(ui_->actionAbout, &QAction::triggered, this,
@@ -213,10 +209,6 @@ void DeCompImgViewMainWindow::onFitHeight() {
     imageViewer_->fitToWindowHeight();
 }
 
-void DeCompImgViewMainWindow::onImageCodec() {
-    std::cout << __FUNCTION__ << std::endl;
-}
-
 void DeCompImgViewMainWindow::onAbout() {
     // std::cout << __FUNCTION__ << std::endl;
     auto about = new Lux::ziwi::About();
@@ -235,7 +227,7 @@ void DeCompImgViewMainWindow::scrollChanged() {
 
 void DeCompImgViewMainWindow::paramConfig() {
     // std::cout << __FUNCTION__ << std::endl;
-    paraConfDialog_ = new Lux::ziwi::ParaConfDialog;
+    paraConfDialog_ = new Lux::ziwi::ParaConfDialog();
     paraConfDialog_->setWindowIcon(QIcon(kICON_LOGO.c_str()));
 
     auto ret = paraConfDialog_->exec();
@@ -248,7 +240,21 @@ void DeCompImgViewMainWindow::paramConfig() {
         bpp_ = paraConf.bpp;
         mode_ = paraConf.mode;
         endian_ = paraConf.bigEndian;
+
+        std::unique_ptr<QSettings> setPtr = std::make_unique<QSettings>(
+            kPARA_INI.c_str(), QSettings::IniFormat);
+        setPtr->setValue("workspace", workspace_);
+        setPtr->setValue("width", width_);
+        setPtr->setValue("height", height_);
+        setPtr->setValue("channels", channel_);
+        setPtr->setValue("bpp", bpp_);
+        setPtr->setValue("mode", mode_);
+        setPtr->setValue("endian", endian_);
+
     } else {
         std::cout << "cancel" << std::endl;
     }
+
+    delete paraConfDialog_;
+    paraConfDialog_ = nullptr;
 }

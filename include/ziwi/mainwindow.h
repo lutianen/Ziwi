@@ -66,7 +66,6 @@ private slots:
     void onFitWindow();
     void onFitWidth();
     void onFitHeight();
-    void onImageCodec();
     void onAbout();
     void transformChanged();
     void scrollChanged();
