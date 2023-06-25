@@ -102,13 +102,27 @@ void DeCompImgViewMainWindow::buildImageViewer() {
     ui_->centralwidget->setLayout(ui_->gridLayout);
 }
 
+///
+/// @brief Update the title including the status bar and the MainWindow tittle
+///
+void DeCompImgViewMainWindow::updateTittle(std::string name) {
+    if (name.empty()) return;
+
+    QString fileName = QString::fromStdString(name);
+    fileLabel_->setText(fileName);
+    auto idx = name.find_last_of('/');
+    if (idx != std::string::npos)
+        setWindowTitle(
+            QString::fromStdString(name.substr(idx + 1) + kAT + kAppName));
+}
+
 ImageInfo* DeCompImgViewMainWindow::loadImageData() {
     // std::cout << __FUNCTION__ << std::endl;
 
     QString fileName = QFileDialog::getOpenFileName(
         this, tr("选择图像"), kBASE_DIR.c_str(),
         tr("图像文件(*.raw *.jpg *.png *.tiff *.svg);;所有文件 (*.*)"));
-    fileLabel_->setText(fileName);
+    updateTittle(fileName.toStdString());
 
     ImageInfo* info = new ImageInfo();
 

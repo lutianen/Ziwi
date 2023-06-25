@@ -6,14 +6,16 @@
 #include <string>
 
 const std::string VERSION = "Ver 1.1.1";
-const std::string Github = "<a href=\"https://github.com/lutianen/Ziwi\">"
-           "Ziwi @ Image Viewer [ " + VERSION + " ]";
+const std::string Github =
+    "<a href=\"https://github.com/lutianen/Ziwi\">"
+    "Ziwi @ Image Viewer [ " +
+    VERSION + " ]";
 const std::string SYSTEM_INFO =
     "Ziwi is a free and open source image viewer, based on Qt5 and OpenCV4, "
     "implemented in C++ programming. It can be used to view 8 bits / 12 bits / "
     "16 bits Bayer images, but also supports a variety of common image "
     "formats, such as PNG, JPG, TIFF, SVG, etc.\n\n"
-    
+
     "BSD 3-Clause License\n"
 
     "Copyright (c) 2023, lutianen\n"
@@ -53,12 +55,13 @@ const std::string SYSTEM_INFO =
 
 #define ABOUT_WIDGET_WIDTH 360
 #define ABOUT_WIDGET_HEIGHT 430
+const std::string kAT{" @ "};
 const char *const kAppName = "Ziwi";
 const QColor kNormalColor = QColor("#2C3E50");
 const QColor kSelectedColor = QColor("#2980B9");
 
 //
-const std::string kABOUT_TITLE {"Ziwi @ Image Viewer"};
+const std::string kABOUT_TITLE{kAppName + kAT + "Image Viewer"};
 // FIXME change kBASE_DIR to your own path
 const std::string kBASE_DIR{"/home/lux/Desktop/Ziwi/"};
 const std::string kICON_LOGO = kBASE_DIR + "icon/logo.ico";
@@ -70,7 +73,7 @@ const std::string kICON_FIT_WIDTH = kBASE_DIR + "icon/fitWidth.svg";
 const std::string kICON_FIT_WINDOW = kBASE_DIR + "icon/fitWindow.svg";
 const std::string kICON_GETIMAGE = kBASE_DIR + "icon/getImg.svg";
 
-// 
+//
 const std::string RELAY_DIR = kBASE_DIR + "internal";
 const std::string RELAY_FILE = kBASE_DIR + "internal/internal_only_disp.raw";
 

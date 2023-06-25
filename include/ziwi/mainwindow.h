@@ -59,6 +59,7 @@ private:
 
     ImageInfo* loadImageData();
     void paramConfig();
+    void updateTittle(std::string name);
 
 private slots:
     void onShowLVDSImage();

@@ -62,3 +62,4 @@
 
 - [x] 添加普通对象查看功能
 - [x] 针对 raw 图像，添加参数记忆功能
+- [x] Update the title including the status bar and the MainWindow tittle
