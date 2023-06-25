@@ -41,6 +41,7 @@ private:
     QRadioButton* radio28_;
     QRadioButton* radio38_;
     QRadioButton* radio48_;
+    QRadioButton* radio58_;
     QRadioButton* radioAll8_;
 
     ParaConf* conf_;

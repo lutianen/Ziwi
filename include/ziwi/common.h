@@ -59,6 +59,7 @@ const QColor kSelectedColor = QColor("#2980B9");
 
 //
 const std::string kABOUT_TITLE {"Ziwi @ Image Viewer"};
+// FIXME change kBASE_DIR to your own path
 const std::string kBASE_DIR{"/home/lux/Desktop/Ziwi/"};
 const std::string kICON_LOGO = kBASE_DIR + "icon/logo.ico";
 const std::string kICON_LOGO_2 = kBASE_DIR + "icon/ziwi.png";
@@ -69,9 +70,12 @@ const std::string kICON_FIT_WIDTH = kBASE_DIR + "icon/fitWidth.svg";
 const std::string kICON_FIT_WINDOW = kBASE_DIR + "icon/fitWindow.svg";
 const std::string kICON_GETIMAGE = kBASE_DIR + "icon/getImg.svg";
 
-//
+// 
 const std::string RELAY_DIR = kBASE_DIR + "internal";
 const std::string RELAY_FILE = kBASE_DIR + "internal/internal_only_disp.raw";
+
+// para.ini - for .raw
+const std::string kPARA_INI = kBASE_DIR + "internal/para.ini";
 
 #ifdef _WIN32
 const QFont FONT = QFont("微软雅黑", 9);

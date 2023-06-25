@@ -1,4 +1,5 @@
 
+#include <ziwi/common.h>
 #include <ziwi/parameterConfigDialog.h>
 
 #include <QButtonGroup>
@@ -7,7 +8,9 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QRadioButton>
+#include <QSettings>
 #include <iostream>
+#include <memory>
 
 using Lux::ziwi::ParaConfDialog;
 
@@ -27,54 +30,107 @@ ParaConfDialog::ParaConfDialog(QDialog *parent)
       radio28_(new QRadioButton("第二高八位", this)),
       radio38_(new QRadioButton("第三高八位", this)),
       radio48_(new QRadioButton("第四高八位", this)),
+      radio58_(new QRadioButton("第五高八位", this)),
       radioAll8_(new QRadioButton("AllIn8", this)),
       conf_(new Lux::ziwi::ParaConf) {
+    auto setPtr =
+        std::make_unique<QSettings>(kPARA_INI.c_str(), QSettings::IniFormat);
 
     QButtonGroup *workSpace = new QButtonGroup(this);
     QLabel *workSpaceLabel = new QLabel("Worksapce: ", this);
     workSpace->addButton(ce7_, 0);
     workSpace->addButton(tw2_, 1);
-    ce7_->setChecked(true);
-        
+    if (setPtr->value("workspace").toInt() == 0)
+        ce7_->setChecked(true);
+    else
+        tw2_->setChecked(true);
+
     QButtonGroup *radioBits = new QButtonGroup(this);
     radioBits->addButton(radio8_, 0);
     radioBits->addButton(radio12_, 1);
     radioBits->addButton(radio16_, 2);
-    radio16_->setChecked(true);
+    switch (setPtr->value("bpp").toInt()) {
+        case 8:
+            radio8_->setChecked(true);
+            break;
+        case 12:
+            radio12_->setChecked(true);
+            break;
+        case 16:
+            radio16_->setChecked(true);
+            break;
+        default:
+            break;
+    }
 
     QButtonGroup *radioEndians = new QButtonGroup(this);
     radioEndians->addButton(radioBigEndian_, 0);
     radioEndians->addButton(radioLittleEndian_, 1);
-    radioLittleEndian_->setChecked(true);
+    if (setPtr->value("endian") == "true")
+        radioBigEndian_->setChecked(true);
+    else
+        radioLittleEndian_->setChecked(true);
 
     QButtonGroup *radio8s = new QButtonGroup();
     radio8s->addButton(radio18_, 0);
     radio8s->addButton(radio28_, 1);
     radio8s->addButton(radio38_, 2);
     radio8s->addButton(radio48_, 3);
-    radio8s->addButton(radioAll8_, 4);
-    radioAll8_->setChecked(true);
+    radio8s->addButton(radio58_, 4);
+    radio8s->addButton(radioAll8_, 5);
+    switch (setPtr->value("mode").toInt()) {
+        case 0:
+            radio18_->setChecked(true);
+            break;
+        case 1:
+            radio28_->setChecked(true);
+            break;
+        case 2:
+            radio38_->setChecked(true);
+            break;
+        case 3:
+            radio48_->setChecked(true);
+            break;
+        case 4:
+            radio58_->setChecked(true);
+            break;
+        case 5:
+            radioAll8_->setChecked(true);
+            break;
+        default:
+            break;
+    }
+    // radioAll8_->setChecked(true);
 
     // Width
     auto widthLabel = new QLabel("Width: ", this);
-    width_->setText("5120");
     connect(width_, &QLineEdit::textChanged, this,
             &ParaConfDialog::onWidthChanged);
     widthLabel->setBuddy(width_);
+    if (setPtr->value("width").toInt() != 0)
+        width_->setText(setPtr->value("width").toString());
+    else
+        width_->setText("5120");
 
     // Height
     auto heightLabel = new QLabel("Height: ", this);
-    height_->setText("3840");
     connect(height_, &QLineEdit::textChanged, this,
             &ParaConfDialog::onHeightChanged);
     heightLabel->setBuddy(height_);
+    if (setPtr->value("height").toInt() != 0)
+        height_->setText(setPtr->value("height").toString());
+    else
+        height_->setText("3840");
 
     // Channels
     auto channelsLabel = new QLabel("Channels: ", this);
-    channels_->setText("1");
     connect(channels_, &QLineEdit::textChanged, this,
             &ParaConfDialog::onChannelsChanged);
     channelsLabel->setBuddy(channels_);
+    if (setPtr->value("channels").toInt() != 0)
+        channels_->setText(setPtr->value("channels").toString());
+    else
+        channels_->setText("1");
 
     // bpp
     auto bppLabel = new QLabel("Bits per pixel: ", this);
@@ -121,7 +177,8 @@ ParaConfDialog::ParaConfDialog(QDialog *parent)
     layout->addWidget(radio28_, 9, 1);
     layout->addWidget(radio38_, 9, 2);
     layout->addWidget(radio48_, 10, 0);
-    layout->addWidget(radioAll8_, 10, 1);
+    layout->addWidget(radio58_, 10, 1);
+    layout->addWidget(radioAll8_, 10, 2);
 
     layout->addWidget(submitBtn, 11, 1, 1, 1);
     setLayout(layout);
@@ -184,6 +241,8 @@ void ParaConfDialog::onSubmit() {
         conf_->mode = 2;
     else if (radio48_->isChecked())
         conf_->mode = 3;
+    else if (radio58_->isChecked())
+        conf_->mode = 4;
     else if (radioAll8_->isChecked())
         conf_->mode = 5;
 
